@@ -1,6 +1,7 @@
 <center>
-<h1>Tu hor&oacute;scopo para el d&iacute;a de hoy</h1>
-{space10}
+	<h1>Tu hor&oacute;scopo para el d&iacute;a de hoy</h1>
+</center>
+
 <table style="text-align:center" width="100%">
 	<tr>
 		<td style="font-weight: bold;font-size: 9em;">{$codHtmlSigno}</td>

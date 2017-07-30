@@ -1,5 +1,5 @@
 <center>
-	<h1>Selecciona el signo que deseas consultar:</h1>
+	<h1>Selecciona el signo que deseas consultar</h1>
 </center>
 
 <table style="text-align:center;" width="100%">
@@ -17,5 +17,3 @@
 		{/strip}
 	{/foreach}
 </table>
-
-{space10}

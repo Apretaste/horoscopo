@@ -1,6 +1,6 @@
 <service>
 	<serviceName>horoscopo</serviceName>
-	<serviceDescription>Consulta y muestra tu horoscopo para el dia de hoy.</serviceDescription>
+	<serviceDescription>Consulta y muestra tu horoscopo para el dia de hoy</serviceDescription>
 	<creatorEmail>jaikerkings@yahoo.es</creatorEmail>
 	<serviceCategory>ocio</serviceCategory>
 	<serviceUsage>
@@ -11,7 +11,7 @@
 			Para: {APRETASTE_EMAIL}
 			Asunto: HOROSCOPO signo
 
-			Recibir&aacute; un email con su horoscopo para el dia de hoy.
+			Recibira un email con su horoscopo para el dia de hoy.
 		]]>
 	</serviceUsage>
 </service>
