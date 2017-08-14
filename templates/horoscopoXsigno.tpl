@@ -4,7 +4,7 @@
 
 <table style="text-align:center" width="100%">
 	<tr>
-		<td style="font-weight: bold;font-size: 9em;">{$codHtmlSigno}</td>
+		<td style="font-weight: bold;font-size: 3em;">{$codHtmlSigno}</td>
 	</tr>
 	<tr>
 		<td ><p style="font-weight: bold;font-size: 2em;margin-bottom: 0;">{$signo}</p><small>({$rangoFechSigno})</small></td>
