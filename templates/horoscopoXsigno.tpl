@@ -4,7 +4,7 @@
 
 <table style="text-align:center" width="100%">
 	<tr>
-		<td style="font-size:150px;"><b>{$codHtmlSigno}</b></td>
+		<td style="font-size:80px;"><b>{$codHtmlSigno}</b></td>
 	</tr>
 	<tr>
 		<td>
