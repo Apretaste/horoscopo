@@ -30,6 +30,7 @@ class Horoscopo extends Service
 		if (empty($request->query))
 		{
 			$response = new Response();
+			$response->setCache();
 			$response->setResponseSubject("&iquest;Cual es tu signo?");
 			$response->createFromTemplate("selectSigno.tpl", array("signos" => $this->signos));
 			return $response;
@@ -40,6 +41,9 @@ class Horoscopo extends Service
 		}
 	}
 
+	/**
+	 * Get the horoscpe by sign
+	 */
 	private function searchHoroscopoXsigno($query)
 	{
 		$nombSignos = array('acuario','aries','cancer','capricornio',"escorpion",'geminis','leo','libra','piscis','sagitario','tauro','virgo');
@@ -56,7 +60,8 @@ class Horoscopo extends Service
 		if ($param == "ESCORPIO") {$param = "ESCORPION";}
 		if ($param == "PICIS") {$param = "PISCIS";}
 
-		if (array_search(strtolower($param), $nombSignos) !== false){
+		if (array_search(strtolower($param), $nombSignos) !== false)
+		{
 			// load from cache if exists
 			$cacheFile = $this->utils->getTempDir() . date("Ymd") . "_horoscope1_today.tmp";
 
@@ -132,10 +137,13 @@ class Horoscopo extends Service
 
 			// create the response
 			$response = new Response();
-			$response->setResponseSubject("Tu horoscopo para el dia de hoy...");
+			$response->setCache("day");
+			$response->setResponseSubject("Tu horoscopo de hoy");
 			$response->createFromTemplate("horoscopoXsigno.tpl", $responseContent);
 			return $response;
-		}else{
+		}
+		else
+		{
 			$response = new Response();
 			$response->setResponseSubject("Escribiste el signo de manera incorrecta");
 			$response->createFromTemplate("selectSigno.tpl", array("signos" => $this->signos));
