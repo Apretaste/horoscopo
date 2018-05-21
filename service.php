@@ -30,7 +30,7 @@ class Horoscopo extends Service
 		if (empty($request->query))
 		{
 			$response = new Response();
-			$response->setCache();
+			$response->setCache(12);
 			$response->setResponseSubject("&iquest;Cual es tu signo?");
 			$response->createFromTemplate("selectSigno.tpl", array("signos" => $this->signos));
 			return $response;
