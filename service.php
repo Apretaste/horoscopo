@@ -30,7 +30,7 @@ class Horoscopo extends Service
 		if (empty($request->query))
 		{
 			$response = new Response();
-			$response->setCache(12);
+			$response->setCache(360);
 			$response->setResponseSubject("&iquest;Cual es tu signo?");
 			$response->createFromTemplate("selectSigno.tpl", array("signos" => $this->signos));
 			return $response;
@@ -65,7 +65,7 @@ class Horoscopo extends Service
 			// load from cache if exists
 			$cacheFile = $this->utils->getTempDir() . date("Ymd") . "_horoscope1_today.tmp";
 
-			if (file_exists($cacheFile)) {
+			if (file_exists($cacheFile) && (time()-filemtime($cacheFile))<21600) {
 				$page = file_get_contents($cacheFile);
 			}else{
 				// get the html code of the page
@@ -77,26 +77,19 @@ class Horoscopo extends Service
 
 			// create a crawler from the text file
 			$crawler = new Crawler($page);
-			$result = $crawler->filter('section.horoscopo article.pt_0');
-
-			foreach ($result as $domElement) {
-				$resultSigno = $domElement->nodeValue;
-				$signoMostrar = trim(substr($resultSigno, 0, strpos($resultSigno, ':')));
-				$signo = preg_replace("/Á/", 'A', $signoMostrar);
+			$crawler->filter('section.horoscopo article.pt_0')->each(function($item) use(&$horoscopoXsigno){
+				$signo = $item->filter('div.hname > span.color')->text();
+				$signo = preg_replace("/Á/", 'A', $signo);
 				$signo = preg_replace("/É/", 'E', $signo);
 				$signo = preg_replace("/Ó/", 'O', $signo);
-				$pronostico = substr($resultSigno, strpos($resultSigno, ':')+1);
-				$patternRangoFechas = "/\d{1,2}\sde\s\w{1,}\s{0,1}-\s{0,1}\d{1,2}\sde\s\w{1,}\s{0,1}/u";
-				$regexpmatch = preg_match($patternRangoFechas, $pronostico, $matches);
-				$rango = $matches[0];
-				$pronostico = "</br>".preg_replace($patternRangoFechas, '', $pronostico);
-
-				$horoscopoXsigno[$signo] = array('signo' => $signoMostrar, 'rango' => $rango, 'pronostico' => $pronostico);
-			}
+				$rango = substr($item->filter('div.hname')->text(),strlen($signo)-1);
+				$pronostico = "</br>".$item->filter('div.htext')->text();
+				$horoscopoXsigno[$signo] = array('signo' => $signo, 'rango' => $rango, 'pronostico' => $pronostico);
+			});
 
 			$cacheFile = $this->utils->getTempDir() . date("Ymd") . "_horoscope2_today.tmp";
 
-			if (file_exists($cacheFile)) {
+			if (file_exists($cacheFile) && (time()-filemtime($cacheFile))<21600) {
 				$page = file_get_contents($cacheFile);
 			}else{
 				// get the html code of the page
@@ -116,13 +109,13 @@ class Horoscopo extends Service
 				$signo = preg_replace("/á/", 'A', $signo);
 				$signo = preg_replace("/é/", 'E', $signo);
 				$signo = preg_replace("/ó/", 'O', $signo);
-				if ($signo == "ESCORPIO") {$signo = "ESCORPION";}
 
 				$pronostico = substr($resultSigno, strpos($resultSigno, '|')+1);
 				$patternRangoFechas = "/\d{1,2}\sde\s\w{1,}\s{0,1}al\s{0,1}\d{1,2}\sde\s\w{1,}\s{0,1}/u";
 				$regexpmatch = preg_match($patternRangoFechas, $pronostico, $matches);
 				$rango = $matches[0];
 				$pronostico = preg_replace($patternRangoFechas, '', $pronostico);
+				if ($signo == "ESCORPIO") {$signo = "ESCORPION";}
 				$horoscopoXsigno[$signo]['pronostico'] .= '</br></br>'.$pronostico;
 			}
 
@@ -137,7 +130,7 @@ class Horoscopo extends Service
 
 			// create the response
 			$response = new Response();
-			$response->setCache("day");
+			$response->setCache(360);
 			$response->setResponseSubject("Tu horoscopo de hoy");
 			$response->createFromTemplate("horoscopoXsigno.tpl", $responseContent);
 			return $response;
