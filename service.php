@@ -29,7 +29,7 @@ class Service
 	 */
 	public function _main(Request $request, Response $response)
 	{
-		$response->setCache(360);
+		$response->setCache('year');
 		$response->setTemplate("home.ejs", ["signos" => $this->signos]);
 	}
 
