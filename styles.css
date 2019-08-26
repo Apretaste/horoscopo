@@ -1,11 +1,6 @@
 .sign {
-	font-weight: bold;
-	font-size: 3em;
-}
-
-.sign-large {
-	font-size: 4em;
 	margin: 0px;
+	font-size: 3em;
 }
 
 .forward-arrow {
