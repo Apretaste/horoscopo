@@ -1,0 +1,16 @@
+<div class="row">
+	<div class="col s12">
+		<h1>Selecciona tu signo</h1>
+
+		<table class="striped">
+			<% for (var k in signos) { %>
+				<tr>
+					<td class="sign"><%- signos[k].codHtml %></td>
+					<td><b><%= signos[k].nombre %></b> <br> <%= signos[k].elemento %></td>
+					<td><%= signos[k].rangoFechas %></td>
+					<td><a href="#!" onclick="apretaste.send({'command':'HOROSCOPO VER', 'data':{'sign':'<%= k %>'}})"><i class="forward-arrow material-icons">arrow_forward</i></a></td>
+				</tr>
+			<% } %>
+		</table>
+	</div>
+</div>

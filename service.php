@@ -2,145 +2,105 @@
 
 use Symfony\Component\DomCrawler\Crawler;
 
-class Horoscopo extends Service
+class Service
 {
-	public $signos = array(
-		'acuario' => array('nombre' => 'Acuario', 'rangoFechas' => '22 de enero - 18 de febrero', 'codHtml' => '&#9810;', 'elemento' => 'Aire', 'astro' => 'Urano / Saturno'),
-		'aries' => array('nombre' => 'Aries', 'rangoFechas' => '21 de marzo - 21 de abril', 'codHtml' => '&#9800;', 'elemento' => 'Fuego', 'astro' => 'Marte / Plut&oacute;n'),
-		'cancer' => array('nombre' => 'C&aacute;ncer', 'rangoFechas' => '22 de junio - 21 de julio', 'codHtml' => '&#9803;', 'elemento' => 'Agua', 'astro' => 'Luna'),
-		'capricornio' => array('nombre' => 'Capricornio', 'rangoFechas' => '22 de diciembre - 21 de enero', 'codHtml' => '&#9809;', 'elemento' => 'Tierra', 'astro' => 'Saturno'),
-		'escorpion' => array('nombre' => 'Escorpi&oacute;n', 'rangoFechas' => '22 de octubre - 21 de noviembre', 'codHtml' => '&#9807;', 'elemento' => 'Agua', 'astro' => 'Plut&oacute;n / Marte'),
-		'geminis' => array('nombre' => 'G&eacute;minis', 'rangoFechas' => '22 de mayo - 21 de junio', 'codHtml' => '&#9802;', 'elemento' => 'Aire', 'astro' => 'Mercurio'),
-		'leo' => array('nombre' => 'Leo', 'rangoFechas' => '22 de julio - 21 de agosto', 'codHtml' => '&#9804;', 'elemento' => 'Fuego', 'astro' => 'Sol'),
-		'libra' => array('nombre' => 'Libra', 'rangoFechas' => '24 de septiembre - 21 de octubre', 'codHtml' => '&#9806;', 'elemento' => 'Aire', 'astro' => 'Venus'),
-		'piscis' => array('nombre' => 'Piscis', 'rangoFechas' => '19 de febrero - 20 de marzo', 'codHtml' => '&#9811;', 'elemento' => 'Agua', 'astro' => ' 	Neptuno / J&uacute;piter'),
-		'sagitario' => array('nombre' => 'Sagitario', 'rangoFechas' => '22 de noviembre - 21 de diciembre 	', 'codHtml' => '&#9808;', 'elemento' => ' 	Fuego', 'astro' => 'J&uacute;piter'),
-		'tauro' => array('nombre' => 'Tauro', 'rangoFechas' => '22 de abril - 21 de mayo', 'codHtml' => '&#9801;', 'elemento' => 'Tierra', 'astro' => 'Venus / Tierra'),
-		'virgo' => array('nombre' => 'Virgo', 'rangoFechas' => '22 de agosto - 23 de septiembre', 'codHtml' => '&#9805;', 'elemento' => 'Tierra', 'astro' => 'Mercurio')
-	);
+	public $signos = [
+		'acuario' => ['nombre' => 'Acuario', 'rangoFechas' => '22 de enero - 18 de febrero', 'codHtml' => '&#9810;', 'elemento' => 'Aire', 'astro' => 'Urano / Saturno'],
+		'aries' => ['nombre' => 'Aries', 'rangoFechas' => '21 de marzo - 21 de abril', 'codHtml' => '&#9800;', 'elemento' => 'Fuego', 'astro' => 'Marte / Plutón'],
+		'cancer' => ['nombre' => 'Cáncer', 'rangoFechas' => '22 de junio - 21 de julio', 'codHtml' => '&#9803;', 'elemento' => 'Agua', 'astro' => 'Luna'],
+		'capricornio' => ['nombre' => 'Capricornio', 'rangoFechas' => '22 de diciembre - 21 de enero', 'codHtml' => '&#9809;', 'elemento' => 'Tierra', 'astro' => 'Saturno'],
+		'escorpion' => ['nombre' => 'Escorpión', 'rangoFechas' => '22 de octubre - 21 de noviembre', 'codHtml' => '&#9807;', 'elemento' => 'Agua', 'astro' => 'Plutón / Marte'],
+		'geminis' => ['nombre' => 'Géminis', 'rangoFechas' => '22 de mayo - 21 de junio', 'codHtml' => '&#9802;', 'elemento' => 'Aire', 'astro' => 'Mercurio'],
+		'leo' => ['nombre' => 'Leo', 'rangoFechas' => '22 de julio - 21 de agosto', 'codHtml' => '&#9804;', 'elemento' => 'Fuego', 'astro' => 'Sol'],
+		'libra' => ['nombre' => 'Libra', 'rangoFechas' => '24 de septiembre - 21 de octubre', 'codHtml' => '&#9806;', 'elemento' => 'Aire', 'astro' => 'Venus'],
+		'piscis' => ['nombre' => 'Piscis', 'rangoFechas' => '19 de febrero - 20 de marzo', 'codHtml' => '&#9811;', 'elemento' => 'Agua', 'astro' => ' 	Neptuno / Júpiter'],
+		'sagitario' => ['nombre' => 'Sagitario', 'rangoFechas' => '22 de noviembre - 21 de diciembre 	', 'codHtml' => '&#9808;', 'elemento' => ' 	Fuego', 'astro' => 'Júpiter'],
+		'tauro' => ['nombre' => 'Tauro', 'rangoFechas' => '22 de abril - 21 de mayo', 'codHtml' => '&#9801;', 'elemento' => 'Tierra', 'astro' => 'Venus / Tierra'],
+		'virgo' => ['nombre' => 'Virgo', 'rangoFechas' => '22 de agosto - 23 de septiembre', 'codHtml' => '&#9805;', 'elemento' => 'Tierra', 'astro' => 'Mercurio'],
+	];
 
 	/**
-	 * Function executed when the service is called
+	 * Display the list of signs
 	 *
-	 * @param Request
+	 * @author salvipascual
+	 * @param Request $request
+	 * @param Response $response
 	 * @return Response
-	 * */
-	public function _main(Request $request)
+	 */
+	public function _main(Request $request, Response $response)
 	{
-		if (empty($request->query))
-		{
-			$response = new Response();
-			$response->setCache(360);
-			$response->setResponseSubject("&iquest;Cual es tu signo?");
-			$response->createFromTemplate("selectSigno.tpl", array("signos" => $this->signos));
-			return $response;
-		}
-		else
-		{
-			return $this->searchHoroscopoXsigno($request->query);
-		}
+		$response->setCache(360);
+		$response->setTemplate("home.ejs", ["signos" => $this->signos]);
 	}
 
 	/**
-	 * Get the horoscpe by sign
+	 * Get information for a sign
+	 *
+	 * @author salvipascual
+	 * @param Request $request
+	 * @param Response $response
+	 * @return Response
 	 */
-	private function searchHoroscopoXsigno($query)
+	public function _ver(Request $request, Response $response)
 	{
-		$nombSignos = array('acuario','aries','cancer','capricornio',"escorpion",'geminis','leo','libra','piscis','sagitario','tauro','virgo');
-		$horoscopoXsigno = array();
-		foreach ($nombSignos as $nombreSigno) {
-			$horoscopoXsigno[strtoupper($nombreSigno)] = null;
+		// no allow non-existant signs
+		$sign = $request->input->data->sign;
+		if( ! array_key_exists($sign, $this->signos)) {
+			return $response->setTemplate('message.ejs', []);
 		}
 
-		// get and clean the argument
-		$param = $query;
-		$param = str_replace("\n", " ", $param);
-		$param = str_replace("\r", "", $param);
-		$param = trim(strtoupper($param));
-		if ($param == "ESCORPIO") {$param = "ESCORPION";}
-		if ($param == "PICIS") {$param = "PISCIS";}
+		// get the forecast for the sign
+		$forecast = $this->getDailyForecast();
 
-		if (array_search(strtolower($param), $nombSignos) !== false)
-		{
-			// load from cache if exists
-			$cacheFile = $this->utils->getTempDir() . date("Ymd") . "_horoscope1_today.tmp";
+		// create a json object to send to the template
+		$content = [
+			"name" => $this->signos[$sign]['nombre'],
+			"element" => $this->signos[$sign]['elemento'],
+			"planet" => $this->signos[$sign]['astro'],
+			"icon" => $this->signos[$sign]['codHtml'],
+			"range" => $this->signos[$sign]['rangoFechas'],
+			"text" => $forecast[$sign]
+		];
 
-			if (file_exists($cacheFile) && (time()-filemtime($cacheFile))<21600) {
-				$page = file_get_contents($cacheFile);
-			}else{
-				// get the html code of the page
-				$page = file_get_contents("http://www.diariolasamericas.com/contenidos/horoscopo.html");
+		// create the response
+		$response->setCache('day');
+		$response->setTemplate("signo.ejs", $content);
+		return $response;
+	}
 
-				// save cache file for today
-				file_put_contents($cacheFile, $page);
-			}
+	/**
+	 * Get information for all the signs
+	 * 
+	 * @author salvipascual
+	 */
+	private function getDailyForecast() 
+	{
+		// get content from cache
+		$cache = Utils::getTempDir() . "horoscopo_" . date("Ymd") . ".cache";
+		if(file_exists($cache)) $content = unserialize(file_get_contents($cache));
+
+		// crawl the data from the web
+		else {
+			// get the html code of the page
+			$page = file_get_contents("http://www.diariolasamericas.com/contenidos/horoscopo.html");
 
 			// create a crawler from the text file
+			$content = [];
 			$crawler = new Crawler($page);
-			$crawler->filter('section.horoscopo article.pt_0')->each(function($item) use(&$horoscopoXsigno){
+			$crawler->filter('section.horoscopo article.pt_0')->each(function($item) use(&$content){
 				$signo = $item->filter('div.hname > span.color')->text();
 				$signo = preg_replace("/Á/", 'A', $signo);
 				$signo = preg_replace("/É/", 'E', $signo);
 				$signo = preg_replace("/Ó/", 'O', $signo);
-				$rango = substr($item->filter('div.hname')->text(),strlen($signo)-1);
-				$pronostico = "</br>".$item->filter('div.htext')->text();
-				$horoscopoXsigno[$signo] = array('signo' => $signo, 'rango' => $rango, 'pronostico' => $pronostico);
+				$signo = strtolower($signo);
+				$content[$signo] = $item->filter('div.htext')->text();
 			});
 
-			$cacheFile = $this->utils->getTempDir() . date("Ymd") . "_horoscope2_today.tmp";
-
-			if (file_exists($cacheFile) && (time()-filemtime($cacheFile))<21600) {
-				$page = file_get_contents($cacheFile);
-			}else{
-				// get the html code of the page
-				$page = file_get_contents("http://www.televen.com/horoscopo/");
-
-				// save cache file for today
-				file_put_contents($cacheFile, $page);
-			}
-
-			// create a crawler and get the text file
-			$crawler = new Crawler($page);
-			$result = $crawler->filter('div#accordion.panel-group div.panel.panel-default');
-
-			foreach ($result as $domElement) {
-				$resultSigno = $domElement->nodeValue;
-				$signo = strtoupper(trim(substr($resultSigno, 0, strpos($resultSigno, '|'))));
-				$signo = preg_replace("/á/", 'A', $signo);
-				$signo = preg_replace("/é/", 'E', $signo);
-				$signo = preg_replace("/ó/", 'O', $signo);
-
-				$pronostico = substr($resultSigno, strpos($resultSigno, '|')+1);
-				$patternRangoFechas = "/\d{1,2}\sde\s\w{1,}\s{0,1}al\s{0,1}\d{1,2}\sde\s\w{1,}\s{0,1}/u";
-				$regexpmatch = preg_match($patternRangoFechas, $pronostico, $matches);
-				$rango = $matches[0];
-				$pronostico = preg_replace($patternRangoFechas, '', $pronostico);
-				if ($signo == "ESCORPIO") {$signo = "ESCORPION";}
-				$horoscopoXsigno[$signo]['pronostico'] .= '</br></br>'.$pronostico;
-			}
-
-
-			// create a json object to send to the template
-			$responseContent = array(
-				"signo" => $this->signos[strtolower($param)]['nombre'],
-				"codHtmlSigno" => $this->signos[strtolower($param)]['codHtml'],
-				"rangoFechSigno" => $this->signos[strtolower($param)]['rangoFechas'],
-				"pronostico" => $horoscopoXsigno[$param]['pronostico']
-			);
-
-			// create the response
-			$response = new Response();
-			$response->setCache(360);
-			$response->setResponseSubject("Tu horoscopo de hoy");
-			$response->createFromTemplate("horoscopoXsigno.tpl", $responseContent);
-			return $response;
+			// create the cache
+			file_put_contents($cache, serialize($content));
 		}
-		else
-		{
-			$response = new Response();
-			$response->setResponseSubject("Escribiste el signo de manera incorrecta");
-			$response->createFromTemplate("selectSigno.tpl", array("signos" => $this->signos));
-			return $response;
-		}
+
+		// return the forecast array
+		return $content;
 	}
 }

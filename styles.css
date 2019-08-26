@@ -1,0 +1,13 @@
+.sign {
+	font-weight: bold;
+	font-size: 3em;
+}
+
+.sign-large {
+	font-size: 5em;
+	margin: 0px;
+}
+
+.forward-arrow {
+	color: grey;
+}

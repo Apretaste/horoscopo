@@ -1,0 +1,8 @@
+{
+	"name": "horoscopo",
+	"version": 1,
+	"description": "Consulta y muestra tu horóscopo para el día de hoy",
+	"category": "ocio",
+	"creator": "salvi@apretaste.org",
+	"listed": true
+}
