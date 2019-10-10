@@ -87,7 +87,7 @@ class Service
 			// create a crawler from the text file
 			$content = [];
 			$crawler = new Crawler($page);
-			$crawler->filter('section.horoscopo article.pt_0')->each(function($item) use(&$content){
+			$crawler->filter('section.horoscopo article')->each(function($item) use(&$content){
 				$signo = $item->filter('div.hname > span.color')->text();
 				$signo = preg_replace("/Á/", 'A', $signo);
 				$signo = preg_replace("/É/", 'E', $signo);
