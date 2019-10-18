@@ -9,7 +9,7 @@ class Service
 		'aries' => ['nombre' => 'Aries', 'rangoFechas' => '21 de marzo - 21 de abril', 'codHtml' => '&#9800;', 'elemento' => 'Fuego', 'astro' => 'Marte / Plutón'],
 		'cancer' => ['nombre' => 'Cáncer', 'rangoFechas' => '22 de junio - 21 de julio', 'codHtml' => '&#9803;', 'elemento' => 'Agua', 'astro' => 'Luna'],
 		'capricornio' => ['nombre' => 'Capricornio', 'rangoFechas' => '22 de diciembre - 21 de enero', 'codHtml' => '&#9809;', 'elemento' => 'Tierra', 'astro' => 'Saturno'],
-		'escorpion' => ['nombre' => 'Escorpión', 'rangoFechas' => '22 de octubre - 21 de noviembre', 'codHtml' => '&#9807;', 'elemento' => 'Agua', 'astro' => 'Plutón / Marte'],
+		'escorpio' => ['nombre' => 'Escorpio', 'rangoFechas' => '22 de octubre - 21 de noviembre', 'codHtml' => '&#9807;', 'elemento' => 'Agua', 'astro' => 'Plutón / Marte'],
 		'geminis' => ['nombre' => 'Géminis', 'rangoFechas' => '22 de mayo - 21 de junio', 'codHtml' => '&#9802;', 'elemento' => 'Aire', 'astro' => 'Mercurio'],
 		'leo' => ['nombre' => 'Leo', 'rangoFechas' => '22 de julio - 21 de agosto', 'codHtml' => '&#9804;', 'elemento' => 'Fuego', 'astro' => 'Sol'],
 		'libra' => ['nombre' => 'Libra', 'rangoFechas' => '24 de septiembre - 21 de octubre', 'codHtml' => '&#9806;', 'elemento' => 'Aire', 'astro' => 'Venus'],
@@ -82,19 +82,16 @@ class Service
 		// crawl the data from the web
 		else {
 			// get the html code of the page
-			$page = file_get_contents("http://www.diariolasamericas.com/contenidos/horoscopo.html");
-
-			// create a crawler from the text file
-			$content = [];
+			$page = file_get_contents("https://www.clarin.com/horoscopo");
 			$crawler = new Crawler($page);
-			$crawler->filter('section.horoscopo article')->each(function($item) use(&$content){
-				$signo = $item->filter('div.hname > span.color')->text();
-				$signo = preg_replace("/Á/", 'A', $signo);
-				$signo = preg_replace("/É/", 'E', $signo);
-				$signo = preg_replace("/Ó/", 'O', $signo);
-				$signo = strtolower($signo);
-				$content[$signo] = $item->filter('div.htext')->text();
-			});
+
+			// get horoscopo for each day
+			$content = [];
+			foreach ($this->signos as $sign => $values) {
+				$signoNombre = $values["nombre"];
+				$signText = $crawler->filter('#data-'.$signoNombre)->html();
+				$content[$sign] = $signText;
+			}
 
 			// create the cache
 			file_put_contents($cache, serialize($content));
