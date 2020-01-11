@@ -1,6 +1,16 @@
 <?php
 
 use Symfony\Component\DomCrawler\Crawler;
+use Goutte\Client;
+use Apretaste\Notifications;
+use Apretaste\Money;
+use Apretaste\Person;
+use Apretaste\Request;
+use Apretaste\Response;
+use Framework\Database;
+use Apretaste\Challenges;
+use Apretaste\Level;
+use Framework\Utils;
 
 class Service
 {
@@ -22,31 +32,35 @@ class Service
 	/**
 	 * Display the list of signs
 	 *
-	 * @author salvipascual
-	 * @param Request $request
+	 * @param Request  $request
 	 * @param Response $response
-	 * @return Response
+	 *
+	 * @return void
+	 * @throws \Framework\Alert
+	 * @author salvipascual
 	 */
-	public function _main(Request $request, Response $response)
+	public function _main(Request $request, Response &$response)
 	{
 		$response->setCache('year');
-		$response->setTemplate("home.ejs", ["signos" => $this->signos]);
+		$response->setTemplate('home.ejs', ['signos' => $this->signos]);
 	}
 
 	/**
 	 * Get information for a sign
 	 *
-	 * @author salvipascual
-	 * @param Request $request
+	 * @param Request  $request
 	 * @param Response $response
-	 * @return Response
+	 *
+	 * @throws \Framework\Alert
+	 * @author salvipascual
 	 */
-	public function _ver(Request $request, Response $response)
+	public function _ver(Request $request, Response &$response)
 	{
 		// no allow non-existant signs
 		$sign = $request->input->data->sign;
 		if( ! array_key_exists($sign, $this->signos)) {
-			return $response->setTemplate('message.ejs', []);
+			$response->setTemplate('message.ejs', []);
+			return;
 		}
 
 		// get the forecast for the sign
@@ -54,18 +68,17 @@ class Service
 
 		// create a json object to send to the template
 		$content = [
-			"name" => $this->signos[$sign]['nombre'],
-			"element" => $this->signos[$sign]['elemento'],
-			"planet" => $this->signos[$sign]['astro'],
-			"icon" => $this->signos[$sign]['codHtml'],
-			"range" => $this->signos[$sign]['rangoFechas'],
-			"text" => $forecast[$sign]
+				'name'    => $this->signos[$sign]['nombre'],
+				'element' => $this->signos[$sign]['elemento'],
+				'planet'  => $this->signos[$sign]['astro'],
+				'icon'    => $this->signos[$sign]['codHtml'],
+				'range'   => $this->signos[$sign]['rangoFechas'],
+				'text'    => $forecast[$sign]
 		];
 
 		// create the response
 		$response->setCache('day');
-		$response->setTemplate("signo.ejs", $content);
-		return $response;
+		$response->setTemplate('signo.ejs', $content);
 	}
 
 	/**
@@ -76,19 +89,19 @@ class Service
 	private function getDailyForecast() 
 	{
 		// get content from cache
-		$cache = Utils::getTempDir() . "horoscopo_" . date("Ymd") . ".cache";
+		$cache = TEMP_PATH .'horoscopo_'. date('Ymd') .'.cache';
 		if(file_exists($cache)) $content = unserialize(file_get_contents($cache));
 
 		// crawl the data from the web
 		else {
 			// get the html code of the page
-			$page = file_get_contents("https://www.clarin.com/horoscopo");
+			$page = file_get_contents('https://www.clarin.com/horoscopo');
 			$crawler = new Crawler($page);
 
 			// get horoscopo for each day
 			$content = [];
 			foreach ($this->signos as $sign => $values) {
-				$signoNombre = $values["nombre"];
+				$signoNombre = $values['nombre'];
 				$signText = $crawler->filter('#data-'.$signoNombre)->html();
 				$content[$sign] = $signText;
 			}
