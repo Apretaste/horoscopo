@@ -24,7 +24,7 @@ class Service
 	/**
 	 * Display the list of signs
 	 *
-	 * @param Request  $request
+	 * @param Request $request
 	 * @param Response $response
 	 *
 	 * @return void
@@ -40,7 +40,7 @@ class Service
 	/**
 	 * Get information for a sign
 	 *
-	 * @param Request  $request
+	 * @param Request $request
 	 * @param Response $response
 	 *
 	 * @throws \Framework\Alert
@@ -50,7 +50,7 @@ class Service
 	{
 		// no allow non-existant signs
 		$sign = $request->input->data->sign;
-		if( ! array_key_exists($sign, $this->signos)) {
+		if (! array_key_exists($sign, $this->signos)) {
 			$response->setTemplate('message.ejs', []);
 			return;
 		}
@@ -60,12 +60,12 @@ class Service
 
 		// create a json object to send to the template
 		$content = [
-				'name'    => $this->signos[$sign]['nombre'],
+				'name' => $this->signos[$sign]['nombre'],
 				'element' => $this->signos[$sign]['elemento'],
-				'planet'  => $this->signos[$sign]['astro'],
-				'icon'    => $this->signos[$sign]['codHtml'],
-				'range'   => $this->signos[$sign]['rangoFechas'],
-				'text'    => $forecast[$sign]
+				'planet' => $this->signos[$sign]['astro'],
+				'icon' => $this->signos[$sign]['codHtml'],
+				'range' => $this->signos[$sign]['rangoFechas'],
+				'text' => $forecast[$sign]
 		];
 
 		// create the response
@@ -75,14 +75,16 @@ class Service
 
 	/**
 	 * Get information for all the signs
-	 * 
+	 *
 	 * @author salvipascual
 	 */
-	private function getDailyForecast() 
+	private function getDailyForecast()
 	{
 		// get content from cache
 		$cache = TEMP_PATH .'horoscopo_'. date('Ymd') .'.cache';
-		if(file_exists($cache)) $content = unserialize(file_get_contents($cache));
+		if (file_exists($cache)) {
+			$content = unserialize(file_get_contents($cache));
+		}
 
 		// crawl the data from the web
 		else {
