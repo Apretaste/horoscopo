@@ -1,16 +1,8 @@
 <?php
 
-use Symfony\Component\DomCrawler\Crawler;
-use Goutte\Client;
-use Apretaste\Notifications;
-use Apretaste\Money;
-use Apretaste\Person;
 use Apretaste\Request;
 use Apretaste\Response;
-use Framework\Database;
-use Apretaste\Challenges;
-use Apretaste\Level;
-use Framework\Utils;
+use Framework\Crawler;
 
 class Service
 {
@@ -95,14 +87,13 @@ class Service
 		// crawl the data from the web
 		else {
 			// get the html code of the page
-			$page = file_get_contents('https://www.clarin.com/horoscopo');
-			$crawler = new Crawler($page);
+			Crawler::start('https://www.clarin.com/horoscopo');
 
 			// get horoscopo for each day
 			$content = [];
 			foreach ($this->signos as $sign => $values) {
 				$signoNombre = $values['nombre'];
-				$signText = $crawler->filter('#data-'.$signoNombre)->html();
+				$signText = Crawler::filter('#data-'.$signoNombre)->html();
 				$content[$sign] = $signText;
 			}
 
