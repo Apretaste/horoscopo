@@ -81,13 +81,8 @@ class Service
 	private function getDailyForecast()
 	{
 		// get content from cache
-		$cache = TEMP_PATH .'horoscopo_'. date('Ymd') .'.cache';
-		if (file_exists($cache)) {
-			$content = unserialize(file_get_contents($cache));
-		}
-
-		// crawl the data from the web
-		else {
+		$content = self::loadCache();
+		if ($content === null) {
 			// get the html code of the page
 			Crawler::start('https://www.clarin.com/horoscopo');
 
@@ -100,10 +95,53 @@ class Service
 			}
 
 			// create the cache
-			file_put_contents($cache, serialize($content));
+			self::saveCache($content);
 		}
 
 		// return the forecast array
 		return $content;
+	}
+
+	/**
+	 * Get cache file name
+	 *
+	 * @param $name
+	 *
+	 * @return string
+	 */
+	public static function getCacheFileName($name): string
+	{
+		return TEMP_PATH.'cache/horoscopo_'.$name.'_'.date('Ymd').'.tmp';
+	}
+
+	/**
+	 * Load cache
+	 *
+	 * @param $name
+	 * @param null $cacheFile
+	 *
+	 * @return bool|mixed
+	 */
+	public static function loadCache($name = 'cache', &$cacheFile = null)
+	{
+		$data = null;
+		$cacheFile = self::getCacheFileName($name);
+		if (file_exists($cacheFile)) {
+			$data = unserialize(file_get_contents($cacheFile));
+		}
+		return $data;
+	}
+
+	/**
+	 * Save cache
+	 *
+	 * @param $name
+	 * @param $data
+	 * @param null $cacheFile
+	 */
+	public static function saveCache($data, $name = 'cache', &$cacheFile = null)
+	{
+		$cacheFile = self::getCacheFileName($name);
+		file_put_contents($cacheFile, serialize($data));
 	}
 }
