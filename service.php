@@ -35,6 +35,27 @@ class Service
 	{
 		$response->setCache('year');
 		$response->setTemplate('home.ejs', ['signos' => $this->signos]);
+
+		// challenges
+		Challenges::track('horoscopo-7', $request->person->id, ['last_date' => null, 'times' => 0], static function ($track) {
+			$format = 'Y-m-d';
+
+			// get yesterday
+			$yesterday = new DateTime();
+			$yesterday->add(DateInterval::createFromDateString('yesterday'));
+			$yesterday = $yesterday->format($format);
+
+			// set 0 for not continuous
+			if ($track['last_date'] != $yesterday) {
+				$track['times'] = 0;
+			}
+
+			// track
+			$track['last_date'] = date($format);
+			$track['times']++;
+
+			return $track;
+		});
 	}
 
 	/**
