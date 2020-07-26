@@ -3,6 +3,7 @@
 use Apretaste\Request;
 use Apretaste\Response;
 use Framework\Crawler;
+use Apretaste\Challenges;
 
 class Service
 {
