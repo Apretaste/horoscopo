@@ -37,7 +37,7 @@ class Service
 		$response->setTemplate('home.ejs', ['signos' => $this->signos]);
 
 		// challenges
-		Challenges::track('horoscopo-7', $request->person->id, ['last_date' => null, 'times' => 0], static function ($track) {
+		Challenges::track( $request->person->id, 'horoscopo-7', ['last_date' => null, 'times' => 0], static function ($track) {
 			$format = 'Y-m-d';
 
 			// get yesterday
