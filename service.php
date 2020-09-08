@@ -3,6 +3,7 @@
 use Apretaste\Request;
 use Apretaste\Response;
 use Framework\Crawler;
+use Apretaste\Challenges;
 
 class Service
 {
@@ -35,6 +36,27 @@ class Service
 	{
 		$response->setCache('year');
 		$response->setTemplate('home.ejs', ['signos' => $this->signos]);
+
+		// challenges
+		Challenges::track( $request->person->id, 'horoscopo-7', ['last_date' => null, 'times' => 0], static function ($track) {
+			$format = 'Y-m-d';
+
+			// get yesterday
+			$yesterday = new DateTime();
+			$yesterday->add(DateInterval::createFromDateString('yesterday'));
+			$yesterday = $yesterday->format($format);
+
+			// set 0 for not continuous
+			if ($track['last_date'] != $yesterday) {
+				$track['times'] = 0;
+			}
+
+			// track
+			$track['last_date'] = date($format);
+			$track['times']++;
+
+			return $track;
+		});
 	}
 
 	/**
